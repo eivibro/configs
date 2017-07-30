@@ -1,0 +1,133 @@
+#+TITLE: Emacs Configuration
+
+* Important Information
+This is a documentation for my configuration file used with emacs, loading the packages I want to use,
+and setting my preffered settings. 
+This file is generated from an .org file, which is called in my emacs initialization
+file on startup of emacs. 
+
+* Setting a theme
+  Adding a path to emacs for loading themes, and choosing a theme to load at startup.
+#+begin_src emacs-lisp
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+(load-theme 'zenburn t)
+#+end_src
+
+* User data and babel settings
+#+begin_src emacs-lisp
+(setq user-full-name "Eivind Brox"
+      user-mail-address "eivbro@gmail.com")
+#+end_src
+
+* Setting programming and scripting language parameters.
+#+begin_src emacs-lisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)
+   (C . t)
+   (calc . t)
+   (latex . t)
+   (java . t)
+   (lisp . t)
+   (scheme . t)
+   (sh . t)))
+
+(defun my-org-confirm-babel-evaluate (lang body)
+  "Do not confirm evaluation for these languages."
+  (not (or (string= lang "C")
+           (string= lang "java")
+           (string= lang "python")
+           (string= lang "emacs-lisp"))))
+(setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
+(setq org-babel-python-command "python2")
+#+end_src
+
+#+begin_src emacs-lisp
+(setq org-src-fontify-natively t
+      org-src-window-setup 'current-window
+      org-src-strip-leading-and-trailing-blank-lines t
+      org-src-preserve-indentation t
+      org-src-tab-acts-natively t)
+#+end_src
+  
+* Evil Mode
+
+Here the evil-mode functionality is installed. It is a vi editing mode, so
+that vim users may enjoy using emacs.
+#+begin_src emacs-lisp
+(use-package evil
+  :ensure t
+  :config
+
+  (evil-mode 1)
+  (use-package evil-leader
+    :ensure t
+    :config
+    (global-evil-leader-mode))
+  (use-package evil-surround
+    :ensure t
+    :config
+    (global-evil-surround-mode)
+   (use-package evil-indent-textobject
+    :ensure t)) 
+)
+#+end_src
+
+* LaTeX
+  A nice package for editing LaTeX code in emacs is AuCTeX.
+  There might be a need to edit the way this is loaded so that it is
+  not loaded for non-LaTeX files.
+  #+BEGIN_SRC emacs-lisp
+  (use-package tex :ensure auctex)
+  #+END_SRC
+  Autocompletion and faster editing in mathmode.
+  #+BEGIN_SRC emacs-lisp
+  ;;(use-package cdlatex :ensure t)
+  (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+  #+END_SRC
+  I need this to be able to open PDFs in evince.
+  #+BEGIN_SRC emacs-lisp
+  (eval-after-load "org"
+     '(progn
+         (setcdr (assoc "\\.pdf\\'" org-file-apps) "evince %s")))
+  #+END_SRC 
+  #+BEGIN_SRC 
+  (push '"eps" org-export-latex-inline-image-extensions)
+  #+END_SRC
+* Org-Mode Specifics
+** Archiving TODOs
+Here the location of the archived TODOs is set 
+
+#+BEGIN_SRC emacs-lisp
+(setq org-archive-location (concat "~/.emacs.d/org-archive.org::"))
+#+END_SRC
+
+** Key Combos
+#+BEGIN_SRC emacs-lisp 
+(define-key global-map "\C-ca" 'org-agenda)
+#+END_SRC
+** Timestams on DONE TODOs
+
+#+BEGIN_SRC emacs-lisp
+(setq org-log-done 'time)
+#+END_SRC
+** Agenda Path
+Paths for the files I want to be included when using org agenda
+
+#+BEGIN_SRC emacs-lisp
+(setq org-agenda-files (list "~/Hobby/todo-home.org"
+                             "~/skole/v17/FYS3510/todo-fys3510.org" 
+                             "~/skole/v17/FYS3120/todo-fys3120.org"))
+#+END_SRC
+
+** New Line Behaviour
+Make emacs not move the window when exceeding the length of the line when writing.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-startup-truncated nil)
+#+END_SRC
+** Modifications for LaTeX
+Enable support for enumeration of lists with letters.
+#+BEGIN_SRC emacs-lisp
+(setq org-list-allow-alphabetical t)
+#+END_SRC
