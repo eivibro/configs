@@ -6,12 +6,29 @@ and setting my preffered settings.
 This file is generated from an .org file, which is called in my emacs initialization
 file on startup of emacs. 
 
+*Removing menubar
+#+BEGIN_SRC emacs-lisp
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(setq inhibit-splash-screen t)
+#+END_SRC
+
 * Setting a theme
   Adding a path to emacs for loading themes, and choosing a theme to load at startup.
 #+begin_src emacs-lisp
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 (load-theme 'zenburn t)
 #+end_src
+
+*Installing use-package
+#+BEGIN_SRC emacs-lisp
+(unless (package-installed-p 'use-package)
+ (package-refresh-contents)
+ (package-install 'use-package))
+
+(eval-when-compile
+ (require 'use-package))
+#+END_SRC
 
 * User data and babel settings
 #+begin_src emacs-lisp
@@ -73,6 +90,12 @@ that vim users may enjoy using emacs.
 )
 #+end_src
 
+* Spell Check
+For spell checking I have chosen to use hunspell
+#+BEGIN_SRC emacs-lisp
+(setq ispell-program-name "hunspell")
+#+END_SRC
+
 * LaTeX
   A nice package for editing LaTeX code in emacs is AuCTeX.
   There might be a need to edit the way this is loaded so that it is
@@ -80,12 +103,16 @@ that vim users may enjoy using emacs.
   #+BEGIN_SRC emacs-lisp
   (use-package tex :ensure auctex)
   #+END_SRC
+  To compile documents with biber as backend for citations.
+  #+BEGIN_SRC emacs-lisp
+  (setq TeX-parse-self t)
+  #+END_SRC
   Autocompletion and faster editing in mathmode.
   #+BEGIN_SRC emacs-lisp
   ;;(use-package cdlatex :ensure t)
-  (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+  ;;(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
   #+END_SRC
-  I need this to be able to open PDFs in evince.
+  I need this to be able to open PDFs in evince through org-mode.
   #+BEGIN_SRC emacs-lisp
   (eval-after-load "org"
      '(progn
@@ -115,9 +142,8 @@ Here the location of the archived TODOs is set
 Paths for the files I want to be included when using org agenda
 
 #+BEGIN_SRC emacs-lisp
-(setq org-agenda-files (list "~/Hobby/todo-home.org"
-                             "~/skole/v17/FYS3510/todo-fys3510.org" 
-                             "~/skole/v17/FYS3120/todo-fys3120.org"))
+(setq org-agenda-files (list "~/todo.org"
+                             "~/skole/pensum.org"))
 #+END_SRC
 
 ** New Line Behaviour
@@ -127,7 +153,22 @@ Make emacs not move the window when exceeding the length of the line when writin
 (setq org-startup-truncated nil)
 #+END_SRC
 ** Modifications for LaTeX
+Org-mode is a good tool for basic scinetific writing. Things written in org-mode can be exported to LaTeX. Below follows my configs for LaTeX exportation from org-mode.
+*** Basic Functionality
 Enable support for enumeration of lists with letters.
 #+BEGIN_SRC emacs-lisp
 (setq org-list-allow-alphabetical t)
 #+END_SRC
+
+*** Citations
+First we make emacs use LaTeX compilation, first with pdf, then with biber, then twice again with pdf. This must be done to get the citations in the pdf file.
+     
+#+BEGIN_SRC emacs-lisp
+(setq org-latex-to-pdf-process
+  '("pdflatex %f" "biber %b" "pdflatex %f" "pdflatex %f"))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-ref
+:ensure t)
+#+END_SRC 
