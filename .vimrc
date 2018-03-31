@@ -1,4 +1,4 @@
-"set nocompatible              " required
+set nocompatible              " required
 filetype off                  " required
 filetype plugin on
 "set grepprg=grep\ -nH\$*
@@ -66,7 +66,7 @@ syntax on
 "else
 "  colorscheme zenburn
 "endif
-colorscheme zenburn
+colorscheme wal 
 "Run python code directly in vim
 nnoremap <F5> <esc>:w<enter>:!python2 %:p<enter>
 " let Vundle manage Vundle, required
@@ -80,6 +80,7 @@ Plugin 'tmhedberg/SimpylFold'
 "Plugin 'nvie/vim-flake8'
 "Plugin 'scrooloose/syntastic'
 Plugin 'jnurmine/Zenburn'
+Plugin 'dylanaraps/wal.vim'
 "Plugin 'altercation/vim-colors-solarized'
 "Plugin 'scrooloose/nerdtree'
 "Plugin 'kien/ctrlp.vim'
