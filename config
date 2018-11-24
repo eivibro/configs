@@ -18,7 +18,7 @@ floating_modifier $mod
 
 # start a terminal
 set $term --no-startup-id urxvt
-bindsym $mod+Return exec $term
+bindsym $mod+Return exec --no-startup-id $term
 
 #Remove titlebar 
 new_window 1pixel
@@ -185,30 +185,30 @@ bindsym XF86AudioMute exec --no-startup-id amixer -q set Master toggle
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10
 bindsym XF86MonBrightnessDown exec --no-startup-id  xbacklight -dec 10
 
-bindsym XF86TouchpadToggle exec bash ~/toggleTouchPad.sh
+bindsym XF86TouchpadToggle exec --no-startup-id bash ~/toggleTouchPad.sh
 
 #Taking screenshot with Imagemagick and printscreen button
-bindsym Print exec import -window root screenshot.jpg
+bindsym Print exec --no-startup-id import -window root screenshot.jpg
 #bindsym Print exec import screenshot.jpg
 
 #Media player controls
 #Shortkeys keyboard
 bindsym $mod+space exec --no-startup-id playerctl play-pause
-bindsym $mod+n exec playerctl next
-bindsym $mod+p exec playerctl previous
+bindsym $mod+n exec --no-startup-id playerctl next
+bindsym $mod+p exec --no-startup-id playerctl previous
 #Bindings for standard mediaplayer controls (working with dash)
-bindsym XF86AudioPlay exec playerctl play-pause
-bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous 
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous 
 
 #Keycombo for locking screen
-bindsym $mod+shift+x exec i3lock
+bindsym $mod+shift+x exec --no-startup-id i3lock
 
 #Hide borders (No borders when only one window)
 hide_edge_borders smart
 
 #Starting the progame compton to enable opacity
-exec compton
+exec --no-startup-id compton
 
 # Set colors from Xresources
 # Change 'color7' and 'color2' to whatever colors you want i3 to use 
@@ -230,6 +230,6 @@ client.background       $bg
 # PROTIP: You can also dynamically set dmenu's colors this way:
 bindsym $mod+d exec --no-startup-id dmenu_run -nb "$fg" -nf "$bg" -sb "$bg" -sf "$fg"
 # Start Programs
-bindsym $mod+m 			exec --no-startup-id bash rangerScript.sh
-bindsym $mod+Shift+m		exec $term -e sudo ranger /
+bindsym $mod+m 			exec --no-startup-id $term -e ranger
+bindsym $mod+Shift+m		exec --no-startup-id $term -e sudo ranger /
 bindsym $mod+Shift+w		exec --no-startup-id $BROWSER
