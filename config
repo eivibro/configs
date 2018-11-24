@@ -230,6 +230,6 @@ client.background       $bg
 # PROTIP: You can also dynamically set dmenu's colors this way:
 bindsym $mod+d exec --no-startup-id dmenu_run -nb "$fg" -nf "$bg" -sb "$bg" -sf "$fg"
 # Start Programs
-bindsym $mod+m 			exec --no-startup-id $term -e ranger
+bindsym $mod+m 			exec --no-startup-id $term -bg [90]$bash -e ranger
 bindsym $mod+Shift+m		exec --no-startup-id $term -e sudo ranger /
 bindsym $mod+Shift+w		exec --no-startup-id $BROWSER
